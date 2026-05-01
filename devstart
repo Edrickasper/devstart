@@ -1,0 +1,42 @@
+#!/bin/bash
+
+PROJECTS_DIR="/mnt/72B2E7CCB2E79341/Project Files"
+
+PROJECT=$(
+  fd . "$PROJECTS_DIR" \
+    -t d -H \
+    -E node_modules -E .git -E dist -E build -E .cache -E coverage -E .venv \
+  | while read -r dir; do
+      if [[ -f "$dir/package.json" || -f "$dir/angular.json" || -d "$dir/.git" ]]; then
+        rel="${dir#$PROJECTS_DIR/}"
+        echo "$dir|$rel"
+      fi
+    done \
+  | sort -u \
+  | fzf --delimiter="|" --with-nth=2 \
+        --prompt="Select Project: " \
+  | cut -d'|' -f1
+)
+
+# Exit if nothing selected
+[ -z "$PROJECT" ] && exit
+
+# Open in editor (choose one)
+code "$PROJECT" &   # VS Code
+# nvim "$PROJECT"   # or Neovim
+
+# Optional: open browser or run dev server
+# (custom per project)
+if [ -f "$PROJECT/angular.json" ]; then
+  cd "$PROJECT" || exit
+  ng serve &
+
+  for i in {1..30}; do
+    if curl -s http://localhost:4200 >/dev/null; then
+      break
+    fi
+    sleep 1
+  done
+
+  flatpak run com.google.Chrome "http://localhost:4200" &
+fi
