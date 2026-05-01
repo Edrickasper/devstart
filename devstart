@@ -29,14 +29,5 @@ code "$PROJECT" &   # VS Code
 # (custom per project)
 if [ -f "$PROJECT/angular.json" ]; then
   cd "$PROJECT" || exit
-  ng serve &
-
-  for i in {1..30}; do
-    if curl -s http://localhost:4200 >/dev/null; then
-      break
-    fi
-    sleep 1
-  done
-
-  flatpak run com.google.Chrome "http://localhost:4200" &
+  ng serve --open
 fi
