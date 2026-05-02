@@ -1,32 +1,28 @@
 #!/bin/bash
 
-PROJECTS_DIR="/mnt/72B2E7CCB2E79341/Project Files"
+CONFIG=""
+[ -f "$CONFIG" ] && source "$CONFIG"
 
 PROJECT=$(
-  fd . "$PROJECTS_DIR" \
-    -t d -H \
-    -E node_modules -E .git -E dist -E build -E .cache -E coverage -E .venv \
-  | while read -r dir; do
+  find "$PROJECTS_DIR" -maxdepth "$MAX_DEPTH" -mindepth 1 \
+    \( -name node_modules -o -name .git -o -name dist \
+       -o -name build -o -name .cache -o -name coverage -o -name .venv \) \
+    -prune -o -type d -print \
+  | while IFS= read -r dir; do
       if [[ -f "$dir/package.json" || -f "$dir/angular.json" || -d "$dir/.git" ]]; then
-        rel="${dir#$PROJECTS_DIR/}"
-        echo "$dir|$rel"
+        printf '%s|%s\n' "$dir" "${dir#"$PROJECTS_DIR"/}"
       fi
     done \
-  | sort -u \
   | fzf --delimiter="|" --with-nth=2 \
         --prompt="Select Project: " \
+        --tiebreak=begin \
   | cut -d'|' -f1
 )
 
-# Exit if nothing selected
 [ -z "$PROJECT" ] && exit
 
-# Open in editor (choose one)
-code "$PROJECT" &   # VS Code
-# nvim "$PROJECT"   # or Neovim
+code "$PROJECT" &
 
-# Optional: open browser or run dev server
-# (custom per project)
 if [ -f "$PROJECT/angular.json" ]; then
   cd "$PROJECT" || exit
   ng serve --open
