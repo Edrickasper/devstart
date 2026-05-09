@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG=""
+CONFIG="$HOME/.config/devstart/config"
 [ -f "$CONFIG" ] && source "$CONFIG"
 
 PROJECT=$(
