@@ -6,12 +6,10 @@ INSTALL_DIR="$HOME/.local/bin"
 CONFIG_DIR="$HOME/.config/devstart"
 SCRIPT_NAME="devstart"
 
-echo "Installing project launcher..."
+echo "Installing Devstart..."
 
-# 1. Ensure ~/.local/bin exists
 mkdir -p "$INSTALL_DIR"
 
-# 2. Copy script
 cp devstart.sh "$INSTALL_DIR/$SCRIPT_NAME"
 chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
 
@@ -40,7 +38,6 @@ if [ ! -f "$CONFIG_FILE" ]; then
   cat <<EOF > "$CONFIG_FILE"
 # Project Launcher Config
 PROJECTS_DIR="$USER_PROJECTS_DIR"
-MAX_DEPTH=4
 EOF
 
   echo "Config created at $CONFIG_FILE"

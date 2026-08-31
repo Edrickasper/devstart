@@ -4,12 +4,18 @@ DevStart is a lightweight Bash CLI tool that helps you quickly find, select, ope
 
 ## Features
 
-- **Fast Project Discovery:** Uses `find` to scan your configured projects directory, automatically pruning heavy directories like `node_modules`, `dist`, `build`, `.cache`, `.venv`, and `.git` subfolders for speed.
-- **Smart Project Recognition:** Identifies projects by looking for a `package.json`, `angular.json`, or a `.git` directory.
-- **Fuzzy Search:** Pipes discovered projects into `fzf` for an interactive, fuzzy-searchable selection menu — only the relative project name is displayed, keeping the list clean.
+- **Real-Time Directory Navigator:** Operates as an instantaneous, live TUI file browser without requiring any background indexing or caching.
+- **TUI & Live Preview:** Fully interactive Terminal UI powered by `fzf`. Features a side-by-side layout with a live preview pane showing project details (`package.json`), Git status, and folder contents.
+- **Interactive Navigation:** Drill down into subfolders or navigate back through your history using your keyboard, just like a file browser.
+- **Smart Directory Pruning:** Automatically ignores heavy directories like `node_modules`, `dist`, `build`, `.cache`, `.venv`, and `.git` subfolders to keep your view clean.
+- **Rich Keybindings:**
+  - `Enter`: Open project and start dev server.
+  - `Ctrl+E`: Open in editor only.
+  - `Ctrl+T`: Open a new terminal window in the project folder.
+  - `→` (Right Arrow): Drill down into a highlighted folder.
+  - `←` (Left Arrow): Pop history and go back to the previous folder view.
 - **Auto Editor Open:** Opens the selected project in VS Code (`code`) in the background.
-- **Angular Auto-Serve:** If the selected project is an Angular app (contains `angular.json`), it automatically runs `ng serve --open` to start the dev server and launch it in the browser.
-- **Config-Based Setup:** All configuration (projects directory, max search depth) lives in `~/.config/devstart/config`, keeping the script itself clean and portable.
+- **Angular Auto-Serve:** Automatically runs `ng serve --open` for Angular apps.
 
 ## Prerequisites
 
@@ -68,3 +74,7 @@ devstart
 2. Type to filter, use arrow keys to navigate.
 3. Press `Enter` to select a project.
 4. The project opens in VS Code. If it's an Angular project, `ng serve --open` runs automatically.
+
+---
+
+*This project is proudly **vibecoded**.*
