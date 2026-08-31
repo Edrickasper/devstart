@@ -1,36 +1,40 @@
 # DevStart
 
-DevStart is a lightweight Bash CLI tool that helps you quickly find, select, open, and run development projects from your local machine — all from a single command.
+DevStart is an interactive TUI (Text User Interface) project launcher for your terminal. It lets you browse, preview, and open development projects from a single command — powered by `fzf`.
 
 ## Features
 
-- **Real-Time Directory Navigator:** Operates as an instantaneous, live TUI file browser without requiring any background indexing or caching.
-- **TUI & Live Preview:** Fully interactive Terminal UI powered by `fzf`. Features a side-by-side layout with a live preview pane showing project details (`package.json`), Git status, and folder contents.
-- **Interactive Navigation:** Drill down into subfolders or navigate back through your history using your keyboard, just like a file browser.
-- **Smart Directory Pruning:** Automatically ignores heavy directories like `node_modules`, `dist`, `build`, `.cache`, `.venv`, and `.git` subfolders to keep your view clean.
-- **Rich Keybindings:**
-  - `Enter`: Open project and start dev server.
-  - `Ctrl+E`: Open in editor only.
-  - `Ctrl+T`: Open a new terminal window in the project folder.
-  - `→` (Right Arrow): Drill down into a highlighted folder.
-  - `←` (Left Arrow): Pop history and go back to the previous folder view.
-- **Auto Editor Open:** Opens the selected project in VS Code (`code`) in the background.
-- **Angular Auto-Serve:** Automatically runs `ng serve --open` for Angular apps.
+- **Real-Time Directory Browser:** Instantly lists folders from your configured projects directory. No indexing, no caching — always up to date.
+- **Live Preview Pane:** A side-by-side layout shows project details as you browse:
+  - `package.json` info (name, version, description)
+  - Git branch and status
+  - Directory contents
+- **Flicker-Free Navigation:** Drill down into subfolders and navigate back seamlessly using `fzf`'s internal reload — the TUI never flickers or restarts.
+- **Smart Directory Pruning:** Automatically hides dot directories (`.git`, `.vscode`, etc.), `node_modules`, `dist`, `build`, and `coverage`.
+- **Keybindings:**
+  | Key | Action |
+  |---|---|
+  | `Enter` | Open project in editor & start dev server |
+  | `Ctrl+E` | Open project in editor only |
+  | `Ctrl+T` | Open a new terminal window in the project folder |
+  | `→` (Right Arrow) | Drill down into the highlighted folder |
+  | `←` (Left Arrow) | Go back to the previous folder |
+- **Editor Auto-Detection:** Uses your `$EDITOR` environment variable. Falls back to `code` (VS Code) if not set.
+- **Angular Auto-Serve:** If the selected project contains `angular.json`, automatically runs `ng serve --open`.
 
 ## Prerequisites
 
-Ensure the following are available on your system:
-
 | Tool | Purpose |
 |---|---|
-| **Bash** | Required to run the scripts |
-| **[fzf](https://github.com/junegunn/fzf)** | Interactive fuzzy-search project picker |
-| **[VS Code](https://code.visualstudio.com/)** | Project editor (`code` must be in your `$PATH`) |
-| **[Angular CLI](https://angular.dev/tools/cli)** | Auto-serves Angular projects (`ng` command) — only needed if you use Angular |
+| **Bash 4+** | Required to run the script |
+| **[fzf](https://github.com/junegunn/fzf)** | Powers the interactive TUI |
+| **[Git](https://git-scm.com/)** | Used for preview pane Git status (optional) |
+| **An editor** | `$EDITOR` env var, or `code` (VS Code) as default |
+| **[Angular CLI](https://angular.dev/tools/cli)** | Only needed if you work with Angular projects |
 
 ## Installation
 
-Use the provided `install.sh` script to set everything up automatically:
+Run the provided installer:
 
 ```bash
 bash install.sh
@@ -39,7 +43,7 @@ bash install.sh
 The installer will:
 1. Copy `devstart.sh` to `~/.local/bin/devstart` and make it executable.
 2. Create the config directory at `~/.config/devstart/`.
-3. Prompt you to enter the full path to your projects directory and write a default config file.
+3. Prompt you for the full path to your projects directory and generate the config file.
 
 > **Note:** Make sure `~/.local/bin` is in your `$PATH`. Add the following to your `~/.bashrc` or `~/.zshrc` if it isn't:
 > ```bash
@@ -48,33 +52,38 @@ The installer will:
 
 ## Configuration
 
-The config file is located at `~/.config/devstart/config`. You can edit it manually at any time:
+The config file is located at `~/.config/devstart/config`:
 
 ```bash
 # ~/.config/devstart/config
 
 PROJECTS_DIR="/path/to/your/projects"
-MAX_DEPTH=4
 ```
 
 | Variable | Description |
 |---|---|
 | `PROJECTS_DIR` | Root directory where your projects are stored |
-| `MAX_DEPTH` | How many directory levels deep to search (default: `4`) |
+
+You can also set these environment variables to customize behavior:
+
+| Variable | Default | Description |
+|---|---|---|
+| `EDITOR` | `code` | Editor to open projects with |
+| `TERMINAL` | `x-terminal-emulator` | Terminal emulator for `Ctrl+T` |
 
 ## Usage
 
-Once installed, simply run from anywhere in your terminal:
+Run from anywhere in your terminal:
 
 ```bash
 devstart
 ```
 
-1. A fuzzy-searchable list of your projects will appear.
-2. Type to filter, use arrow keys to navigate.
-3. Press `Enter` to select a project.
-4. The project opens in VS Code. If it's an Angular project, `ng serve --open` runs automatically.
+1. Your project folders appear in a fuzzy-searchable list with a live preview pane.
+2. Use `→` / `←` to browse into and out of folders.
+3. Type to filter results.
+4. Press `Enter` to open the selected project in your editor. If it's an Angular project, `ng serve --open` starts automatically.
 
 ---
 
-*This project is proudly **vibecoded**.*
+*This project is completely **vibecoded**.*
